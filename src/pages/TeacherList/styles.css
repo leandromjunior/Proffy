@@ -1,0 +1,76 @@
+#page-teacher-list {
+ /*Para ocupar a tela inteira */
+    width: 100vw;
+    height: 100vh;
+}
+
+#search-teachers {
+    margin-top: 3.2rem;
+}
+
+#search-teachers label {
+    color: var(--color-text-in-primary);
+}
+
+#search-teachers .input-block {
+    position: relative;
+}
+
+#search-teachers .input-block + .input-block { /* aplica o margin bottom sempre que houver um objeto de classe input-block acima dele */
+    margin-top: 1.4rem;
+}
+
+#search-teachers .input-block label {
+    font-size: 1.4rem;
+}
+
+#search-teachers .input-block input {
+    width: 100%;
+    height: 5.6rem;
+    margin-top: 0.8rem;
+    border-radius: 0.8rem; /*arredondando as bordas */
+    background: var(--color-input-background);
+    border: 1px solid var(--color-line-in-white); /* cor da borda da caixa de texto */
+    outline: 0;
+    padding: 0 1.6rem;
+    font: 1.6rem Archivo; /*fonte do texto que será inserida dentro da caixa de texto */
+}
+
+#search-teachers .input-block:focus-within::after {
+    width: calc(100% - 3.2rem);
+    height: 2px;
+    content: ''; /* obrigatório sempre que estiver usando after ou before */
+    background: var(--color-primary-light);
+    position: absolute;
+    left: 1.6rem;
+    bottom: 0;
+}
+
+#page-teacher-list main { /*distancia entre a foto e a margem */
+    margin: 3.2rem auto;
+    width: 90%;
+}
+
+@media(min-width: 700px) { /*Adaptando para tela Desktop */
+    #page-teacher-list {
+        max-width: 100%;
+    }
+
+    #search-teachers { /*Deixando as caixas de texto de forma vertical */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Com isso quero dizer que repita 3 vezes 1fr. É a mesma coisa que grid-template-columns: 1fr 1fr 1fr; */
+        column-gap: 16px;
+        position: absolute;
+        bottom: -28px;
+    }
+
+    #search-teachers .input-block + .input-block { 
+        margin-top: 0;
+    }
+
+    #page-teacher-list main { /* centralizando o quadro do professor */
+        padding: 3.2rem 0;
+        max-width: 740px;
+        margin: 0 auto;
+    }
+}
