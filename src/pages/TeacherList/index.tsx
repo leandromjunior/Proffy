@@ -12,8 +12,8 @@ function TeacherList() {
            <PageHeader title="Estes são os Proffys disponíveis.">
                 <form id="search-teachers">
                     <Select 
-                        name="subject" 
-                        label="Matéria" 
+                        name="subject"
+                        label="Matéria"
                         options={[
                             { value: 'Português', label: 'Português' },
                             { value: 'Matemática', label: 'Matemática' },
