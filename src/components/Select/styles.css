@@ -1,0 +1,36 @@
+.select-block {
+    position: relative;
+}
+
+.select-block + .select-block { /* aplica o margin bottom sempre que houver um objeto de classe select-block acima dele */
+    margin-top: 1.4rem;
+}
+
+.select-block label {
+    font-size: 1.4rem;
+}
+
+.select-block select {
+    width: 100%;
+    height: 5.6rem;
+    margin-top: 0.8rem;
+    border-radius: 0.8rem; /*arredondando as bordas */
+    background: var(--color-input-background);
+    border: 1px solid var(--color-line-in-white); /* cor da borda da caixa de texto */
+    outline: 0;
+    padding: 0 1.6rem;
+    font: 1.6rem Archivo; /*fonte do texto que será inserida dentro da caixa de texto */
+}
+
+.select-block:focus-within::after {
+    width: calc(100% - 3.2rem);
+    height: 2px;
+    content: ''; /* obrigatório sempre que estiver usando after ou before */
+    background: var(--color-primary-light);
+    position: absolute;
+    left: 1.6rem;
+    bottom: 0;
+}
+
+/* Este css foi feito dentro do styles do TeacherList, porém recortei e trouxe para este css, pois criei um
+componente próprio do Input */
