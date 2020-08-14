@@ -1,36 +1,62 @@
 import React from 'react';
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
 import './styles.css';
+import api from '../../services/api';
 
-function TeacherItem() {
+export interface Teacher {
+    id: number;
+    avatar: string;
+    bio: string;
+    cost: number;
+    name: string;
+    subject: string;
+     whatsapp: string;
+    }
+
+interface TeacherItemProps {
+    teacherVar: Teacher //Estou passando os mesmos valores da interface acima, por isso chamei ela aqui
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacherVar }) => {
+    function createNewConnection() {
+        api.post('connections', {
+            user_id: teacherVar.id,
+        })
+    }
+
     return(
         <article className="teacher-item">
                    <header>
-                       <img src="https://avatars2.githubusercontent.com/u/28444506?s=460&u=16ede2cabb3662003aee574e430ac962225c7567&v=4" alt="Leandro Motta Junior" />
+                       <img src={teacherVar.avatar} alt={teacherVar.name} />
                        <div>
-                           <strong>Leandro Motta Junior</strong>
-                           <span>Biologia</span>
+                           <strong>{teacherVar.name}</strong>
+                           <span>{teacherVar.subject}</span>
                        </div>
                    </header>
 
-                   <p>
-                       Entusiasta da Biologia.
-                       <br/><br/>
-                       Apaixonado pela biologia e sobre seus ensinamentos
-                   </p>
+                    <p>{teacherVar.bio}</p>
 
                    <footer>
                        <p>
                            Preço/Hora
-                           <strong>R$ 60,00</strong>
+                           <strong>R${teacherVar.cost}</strong>
                        </p>
-                       <button type="button">
+                       <a 
+                         target="_blank" //Abre o link em uma nova aba
+                         onClick={createNewConnection} 
+                         href={`http://wa.me/${teacherVar.whatsapp}`}
+                        >
                            <img src={whatsappIcon} alt="Whastapp"/>
                             Entrar em Contato
-                       </button>
+                       </a>
                    </footer>
                </article>
     );
 }
 
 export default TeacherItem;
+
+// Substitui o <button> pelo <a> para poder utilizar o link de mensagem do whatsapp
+
+/* Dentro da tag <a href> utilizei o '$' para poder passar um objeto javaScript dentro de um link, para isso,
+o link deve estar entre chaves e crases */
