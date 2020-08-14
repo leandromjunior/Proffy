@@ -5,8 +5,12 @@ import Input from '../../components/Input';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import Textarea from '../../components/Textarea';
 import Select from '../../components/Select';
+import api from '../../services/api';
+import { useHistory } from 'react-router-dom';
 
 function TeacherForm() {
+    const history = useHistory();
+
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState('');
     const [whatsapp, setWhatsapp] = useState('');
@@ -25,10 +29,37 @@ function TeacherForm() {
             { week_day: 0, from: '', to: '' } // Adicionando o novo item no final do array
         ]);
     }
+
+    function setScheduleItemValue(position: number, field: string, value: string) { //field é referente a week_day, from, to. Ex.: setScheduleItemValue(0,'week_day','2')
+        const updatedScheduleItems = scheduleItems.map((scheduleItem, index) => {
+            if(index === position) { //se index === position, retorna uma cópia do array scheduleItem e acrescenta o field ao final
+                return { ...scheduleItem, [field]: value };
+            }
+            //else
+            return scheduleItem;
+        });
+
+        setScheduleItems(updatedScheduleItems);
+    }
     //Função do <form>
     function handleCreateClass(e: FormEvent) { //declarei o (e) manualmente, pois o typescript não o reconhece
         e.preventDefault(); //Para que a página não fique redirecionando (É normal em formulários HTML)
-        console.log({name, avatar, whatsapp, bio, subject, cost});
+        console.log({name, avatar, whatsapp, bio, subject, cost, scheduleItems});
+
+        api.post('classes', { //Chamando a API
+            name,
+            avatar,
+            whatsapp,
+            bio,
+            subject,
+            cost: Number(cost),
+            schedule: scheduleItems
+        }).then(() => {
+            alert('Cadastrado com Sucesso');
+            history.push('/'); //Redirecionando usuário para Landing Page ao clicar em salvar cadastro
+        }).catch(() => {
+            alert('Erro no Cadastro');
+        })
     }
 
     return (
@@ -105,25 +136,39 @@ function TeacherForm() {
                             </button>
                         </legend>
 
-                        {scheduleItems.map(scheduleItem => {
+                        {scheduleItems.map((scheduleItem, index) => { //Index é referente a psição do array
                             return(
                                 // A informação única na key será o dia da semana, pois assim o usuário não cria mais de um horário no mesmo dia
                                 <div key={scheduleItem.week_day} className="schedule-item">
-                            <Select 
-                                name="week-day" 
-                                label="Dia da Semana" 
-                                options={[
-                                    { value: '0', label: 'Domingo' },
-                                    { value: '1', label: 'Segunda-Feira' },
-                                    { value: '2', label: 'Terça-Feira' },
-                                    { value: '3', label: 'Quarta-Feira' },
-                                    { value: '4', label: 'Quinta-Feira' },
-                                    { value: '5', label: 'Sexta-Feira' },
-                                    { value: '6', label: 'Sábado' },
-                                ]}
-                            />
-                            <Input name='from' label='Das' type='time' />
-                            <Input name='to' label='Até' type='time' />
+                                    <Select 
+                                        name="week-day" 
+                                        label="Dia da Semana" 
+                                        value={scheduleItem.week_day}
+                                        onChange={e => setScheduleItemValue(index, 'week_day', e.target.value)}
+                                        options={[
+                                            { value: '0', label: 'Domingo' },
+                                            { value: '1', label: 'Segunda-Feira' },
+                                            { value: '2', label: 'Terça-Feira' },
+                                            { value: '3', label: 'Quarta-Feira' },
+                                            { value: '4', label: 'Quinta-Feira' },
+                                            { value: '5', label: 'Sexta-Feira' },
+                                            { value: '6', label: 'Sábado' },
+                                        ]}
+                                    />
+                                    <Input 
+                                     name='from' 
+                                     label='Das' 
+                                     type='time' 
+                                     value={scheduleItem.from}
+                                     onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
+                                    />
+                                    <Input 
+                                     name='to' 
+                                     label='Até' 
+                                     type='time'
+                                     value={scheduleItem.to}
+                                     onChange={e => setScheduleItemValue(index, 'to', e.target.value)} 
+                                    />
                                 </div>
                             );
                         })}
